@@ -192,8 +192,9 @@
               </th>
               <th scope="col" class="px-4 py-4">First Name</th>
               <th scope="col" class="px-4 py-3">Last Name</th>
-              <th scope="col" class="px-4 py-3">Phone Number</th>
               <th scope="col" class="px-4 py-3">Email</th>
+              <th scope="col" class="px-4 py-3">Phone Number</th>
+
               <th scope="col" class="px-4 py-3">
                 <span class="sr-only">Actions</span>
               </th>
@@ -201,6 +202,7 @@
           </thead>
           <tbody>
             <tr
+              #contactRow
               *ngFor="let contact of paginatedContacts; let i = index"
               class="border-b dark:border-gray-700"
             >
@@ -228,8 +230,9 @@
               <td class="px-4 py-3 max-w-[12rem] truncate">
                 {{ contact.phone_number }}
               </td>
-              <td class="px-4 py-3 flex items-center justify-end">
+              <td class="relative px-4 py-3 flex items-center justify-end">
                 <button
+                  #dropdownButton
                   (click)="toggleDropdown(i)"
                   class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                   type="button"
@@ -247,9 +250,9 @@
                   </svg>
                 </button>
                 <div
-                  id="apple-imac-27-dropdown"
+                  id="dropdown-{{ i }}"
                   [ngClass]="{ hidden: !dropdownVisible[i] }"
-                  class="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                  class="right-10 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                 >
                   <ul
                     class="py-1 text-sm"
@@ -258,8 +261,7 @@
                     <li>
                       <button
                         type="button"
-                        data-modal-target="updatecontactModal"
-                        data-modal-toggle="updatecontactModal"
+                       (click)="openUpdateContactModal()"
                         class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
                       >
                         <svg
@@ -284,8 +286,7 @@
                     <li>
                       <button
                         type="button"
-                        data-modal-target="readcontactModal"
-                        data-modal-toggle="readcontactModal"
+                        (click)="openReadContactModal()"
                         class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
                       >
                         <svg
@@ -302,14 +303,13 @@
                             d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                           />
                         </svg>
-                        Preview
+                        View
                       </button>
                     </li>
                     <li>
                       <button
                         type="button"
-                        data-modal-target="deleteModal"
-                        data-modal-toggle="deleteModal"
+                        (click)="openDeleteContactModal()"
                         class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400"
                       >
                         <svg
@@ -553,11 +553,15 @@
 </div>
 <!-- Update modal -->
 <div
-  id="updatecontactModal"
-  tabindex="-1"
+aria-hidden="true"
+[ngClass]="{ flex: showUpdateContactModal , hidden: !showUpdateContactModal  }"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
+  <div
+    [ngClass]="{ block: showUpdateContactModal, hidden: !showUpdateContactModal }"
+    class="fixed top-0 left-0 w-full h-full bg-black opacity-50"
+  ></div>
   <div class="relative p-4 w-full max-w-2xl max-h-full">
     <!-- Modal content -->
     <div
@@ -573,7 +577,7 @@
         <button
           type="button"
           class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-toggle="updatecontactModal"
+         (click)="closeUpdateContactModal()"
         >
           <svg
             aria-hidden="true"
@@ -702,11 +706,15 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
 </div>
 <!-- Read modal -->
 <div
-  id="readcontactModal"
+  [ngClass]="{ flex: showReadContactModal , hidden: !showReadContactModal  }"
   tabindex="-1"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
+  <div
+    [ngClass]="{ block: showReadContactModal, hidden: !showReadContactModal }"
+    class="fixed top-0 left-0 w-full h-full bg-black opacity-50"
+  ></div>
   <div class="relative p-4 w-full max-w-xl max-h-full">
     <!-- Modal content -->
     <div
@@ -722,7 +730,7 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-toggle="readcontactModal"
+              (click)="closeReadContactModal()"
           >
             <svg
               aria-hidden="true"
@@ -818,11 +826,15 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
 </div>
 <!-- Delete modal -->
 <div
-  id="deleteModal"
+  [ngClass]="{ flex: showDeleteContactModal , hidden: !showDeleteContactModal  }"
   tabindex="-1"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
+  <div
+    [ngClass]="{ block: showDeleteContactModal, hidden: !showDeleteContactModal }"
+    class="fixed top-0 left-0 w-full h-full bg-black opacity-50"
+  ></div>
   <div class="relative p-4 w-full max-w-md max-h-full">
     <!-- Modal content -->
     <div
@@ -834,7 +846,7 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
         data-modal-toggle="deleteModal"
       >
         <svg
-          aria-hidden="true"
+          (click)="closeDeleteContactModal()"
           class="w-5 h-5"
           fill="currentColor"
           viewbox="0 0 20 20"
@@ -882,5 +894,3 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
     </div>
   </div>
 </div>
-
-<pre>{{ filterContacts | json }}</pre>

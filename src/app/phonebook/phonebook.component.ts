@@ -31,6 +31,9 @@ export class PhonebookComponent implements OnInit {
   endIndex: number = 0;
 
   isCreateModalOpen = false;
+  showUpdateContactModal = false;
+  showReadContactModal = false;
+  showDeleteContactModal = false;
 
   constructor(
     private contactsService: ContactsService,
@@ -67,6 +70,31 @@ export class PhonebookComponent implements OnInit {
       }
     });
   }
+
+  openUpdateContactModal(): void {
+    this.showUpdateContactModal = true;
+  }
+
+  closeUpdateContactModal(): void {
+    this.showUpdateContactModal = false;
+  }
+
+  openReadContactModal(): void {
+    this.showReadContactModal = true;
+  }
+
+  closeReadContactModal(): void {
+    this.showReadContactModal = false;
+  }
+
+  openDeleteContactModal(): void {
+    this.showDeleteContactModal = true;
+  }
+
+  closeDeleteContactModal(): void {
+    this.showDeleteContactModal = false;
+  }
+
   openCreateContactModal(): void {
     this.isCreateModalOpen = true;
   }
@@ -83,8 +111,9 @@ export class PhonebookComponent implements OnInit {
     const lastName = (document.getElementById('lastName') as HTMLInputElement)
       .value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
-    const phoneNumber = (document.getElementById('phoneNumber') as HTMLInputElement)
-      .value;
+    const phoneNumber = (
+      document.getElementById('phoneNumber') as HTMLInputElement
+    ).value;
 
     // Generate a unique ID
     const id = uuidv4();
@@ -100,7 +129,7 @@ export class PhonebookComponent implements OnInit {
 
     // Add new contact via service
     this.stateService.addContact(newContact);
-   
+
     // Close the modal
     this.closeCreateContactModal();
   }
