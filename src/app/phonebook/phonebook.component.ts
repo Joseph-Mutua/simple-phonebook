@@ -200,7 +200,7 @@ export class PhonebookComponent implements OnInit {
 
   deleteSelectedContacts() {
     // Create a new array that contains only the contacts that are not selected
-    const newContacts = this.paginatedContacts.filter(
+    const newContacts = this.filteredContacts.filter(
       (contact) => !contact.selected
     );
 
