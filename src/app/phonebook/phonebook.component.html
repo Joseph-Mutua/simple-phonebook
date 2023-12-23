@@ -29,9 +29,12 @@
               </div>
               <input
                 type="text"
-                id="simple-search"
+                name="search"
+                [(ngModel)]="searchKeyword"
+                (ngModelChange)="onSearchChange($event)"
+                placeholder="Search by Name / Email / Phone Number"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Search"
+       
                 required=""
               />
             </div>
@@ -333,6 +336,11 @@
                 </div>
               </td>
             </tr>
+            <tr *ngIf="paginatedContacts.length === 0">
+              <td colspan="5" class="text-center text-bold text-3xl">
+                No Contact Found
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -355,7 +363,7 @@
           <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
             <a
               class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              (click)="currentPage > 1 ? (currentPage = currentPage + 1) : null"
+              (click)="currentPage > 1 ? (currentPage = currentPage - 1) : null"
             >
               <span class="sr-only">Previous</span>
               <svg
@@ -691,7 +699,6 @@
       <!-- Modal header -->
       <div class="flex justify-between mb-4 rounded-t sm:mb-5">
         <div class="text-lg text-gray-900 md:text-xl dark:text-white">
-        
           <h3 class="font-semibold text-3xl">
             {{ selectedContact.first_name }} {{ selectedContact.last_name }}
           </h3>
@@ -729,11 +736,7 @@
         <dd class="mb-4 text-xl font-semibold">
           {{ selectedContact.email }}
         </dd>
-              <dt
-          class="mb-2 font-light leading-none text-2xl"
-        >
-          Phone Number :
-        </dt>
+        <dt class="mb-2 font-light leading-none text-2xl">Phone Number :</dt>
         <dd class="mb-4 font-semibold">
           {{ selectedContact.phone_number }}
         </dd>
