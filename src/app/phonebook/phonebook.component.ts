@@ -1,24 +1,12 @@
-// import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
-// @Component({
-//   selector: 'app-phonebook',
-//   standalone: true,
-//   imports: [
-
-//   ],
-//   templateUrl: './phonebook.component.html',
-//   styleUrl: './phonebook.component.css',
-// })
-
-// export class PhonebookComponent {
-
-// }
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Contact } from '../interfaces/contacts.model';
 import { SharedModule } from '../shared/shared.module';
 import { ContactsService } from '../services/contacts.service';
 import { StateService } from '../services/state.service';
-import { Observable } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   standalone: true,
@@ -42,9 +30,11 @@ export class PhonebookComponent implements OnInit {
 
   endIndex: number = 0;
 
+  isCreateModalOpen = false;
+
   constructor(
     private contactsService: ContactsService,
-    private stateService: StateService
+    private stateService: StateService //private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -63,6 +53,8 @@ export class PhonebookComponent implements OnInit {
       });
     });
   }
+  @ViewChild('createcontactModal')
+  createcontactModal!: ElementRef;
 
   toggleDropdown(index: number): void {
     // Toggle the visibility of the dropdown at the specified index
@@ -74,6 +66,43 @@ export class PhonebookComponent implements OnInit {
         this.dropdownVisible[i] = false;
       }
     });
+  }
+  openCreateContactModal(): void {
+    this.isCreateModalOpen = true;
+  }
+
+  closeCreateContactModal(): void {
+    this.isCreateModalOpen = false;
+  }
+
+  //Create New Contact
+  addNewContact(): void {
+    // Extract form values as before
+    const firstName = (document.getElementById('firstName') as HTMLInputElement)
+      .value;
+    const lastName = (document.getElementById('lastName') as HTMLInputElement)
+      .value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const phoneNumber = (document.getElementById('phoneNumber') as HTMLInputElement)
+      .value;
+
+    // Generate a unique ID
+    const id = uuidv4();
+
+    // Create new contact object with generated ID
+    const newContact: Contact = {
+      id: id,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      phone_number: phoneNumber,
+    };
+
+    // Add new contact via service
+    this.stateService.addContact(newContact);
+   
+    // Close the modal
+    this.closeCreateContactModal();
   }
 
   //Search input function

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+//import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
+    //ToastrModule.forRoot(),
   ],
   exports: [
     CommonModule,

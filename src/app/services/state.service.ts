@@ -6,7 +6,9 @@ import { Contact } from '../interfaces/contacts.model';
   providedIn: 'root',
 })
 export class StateService {
-  private _contacts: BehaviorSubject<Contact[]> = new BehaviorSubject<Contact[]>([]);
+  private _contacts: BehaviorSubject<Contact[]> = new BehaviorSubject<
+    Contact[]
+  >([]);
 
   //fetch contacts
   get contacts(): Observable<Contact[]> {
@@ -15,6 +17,18 @@ export class StateService {
 
   //set contacts to state
   setContacts(contacts: Contact[]): void {
+    this._contacts.next(contacts);
+  }
+
+  //add contact
+  addContact(contact: Contact): void {
+    // Get the current list of contacts
+    let contacts = this._contacts.getValue();
+
+    // Add the new contact to the list
+    contacts.push(contact);
+
+    // Update the state with the new list
     this._contacts.next(contacts);
   }
 }

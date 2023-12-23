@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Contact } from '../interfaces/contacts.model';
 import { StateService } from './state.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -18,4 +20,5 @@ export class ContactsService {
       this.stateService.setContacts(contacts);
     });
   }
+
 }
