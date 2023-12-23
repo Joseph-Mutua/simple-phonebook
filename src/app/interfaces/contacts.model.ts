@@ -4,4 +4,5 @@ export interface Contact {
   last_name: string;
   email: string;
   phone_number: string;
+  selected?: boolean;
 }

@@ -4,7 +4,6 @@ import { SharedModule } from '../shared/shared.module';
 import { ContactsService } from '../services/contacts.service';
 import { StateService } from '../services/state.service';
 import { v4 as uuidv4 } from 'uuid';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
@@ -32,6 +31,7 @@ export class PhonebookComponent implements OnInit {
   showUpdateContactModal = false;
   showReadContactModal = false;
   showDeleteContactModal = false;
+  allChecked: boolean = false;
 
   selectedContact: Contact = {
     id: '',
@@ -198,10 +198,28 @@ export class PhonebookComponent implements OnInit {
     this.closeDeleteContactModal();
   }
 
+  deleteSelectedContacts() {
+    // Create a new array that contains only the contacts that are not selected
+    const newContacts = this.paginatedContacts.filter(
+      (contact) => !contact.selected
+    );
+
+    // Update the stateService
+    this.stateService.updateContacts(newContacts);
+  }
+
   //Search input function
   onSearchChange(searchKeyword: string) {
     this.searchKeyword = searchKeyword;
     this.filterContacts();
+  }
+
+  // Function to check/uncheck all checkboxes
+  selectAll(event: Event) {
+    let isChecked = (event.target as HTMLInputElement).checked;
+    this.paginatedContacts.forEach((contact) => {
+      contact.selected = isChecked;
+    });
   }
 
   //Filtering and Sort Functionality
