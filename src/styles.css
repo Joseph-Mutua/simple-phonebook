@@ -2,4 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.active {
+  @apply text-white bg-blue-500;
+}
+
+.disabled {
+  @apply text-gray-400 cursor-not-allowed;
+}
 
