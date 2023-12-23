@@ -44,4 +44,16 @@ export class StateService {
       // Update the state with the new list
       this._contacts.next(contacts);
     }
+
+    //delete contact
+    deleteContact(id: string): void {
+      // Get the current list of contacts
+      let contacts = this._contacts.getValue();
+  
+      // Filter out the contact being deleted
+      contacts = contacts.filter((c) => c.id !== id);
+  
+      // Update the state with the new list
+      this._contacts.next(contacts);
+    }
 }

@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Contact } from '../interfaces/contacts.model';
 import { SharedModule } from '../shared/shared.module';
@@ -6,7 +5,6 @@ import { ContactsService } from '../services/contacts.service';
 import { StateService } from '../services/state.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
-
 
 @Component({
   standalone: true,
@@ -36,6 +34,7 @@ export class PhonebookComponent implements OnInit {
   showDeleteContactModal = false;
 
   selectedContact: Contact = {
+    id: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -87,7 +86,8 @@ export class PhonebookComponent implements OnInit {
     this.showUpdateContactModal = false;
   }
 
-  openReadContactModal(): void {
+  openReadContactModal(contact: Contact): void {
+    this.selectedContact = contact;
     this.showReadContactModal = true;
   }
 
@@ -95,7 +95,8 @@ export class PhonebookComponent implements OnInit {
     this.showReadContactModal = false;
   }
 
-  openDeleteContactModal(): void {
+  openDeleteContactModal(contact: Contact): void {
+    this.selectedContact = contact;
     this.showDeleteContactModal = true;
   }
 
@@ -171,6 +172,15 @@ export class PhonebookComponent implements OnInit {
 
     // Close the modal
     this.closeUpdateContactModal();
+  }
+
+  //Delete Contact
+  deleteContact(): void {
+    // Delete contact via service
+    this.stateService.deleteContact(this.selectedContact.id);
+
+    // Close the modal
+    this.closeDeleteContactModal();
   }
 
   //Search input function
