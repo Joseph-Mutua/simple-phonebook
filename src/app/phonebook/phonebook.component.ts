@@ -35,6 +35,13 @@ export class PhonebookComponent implements OnInit {
   showReadContactModal = false;
   showDeleteContactModal = false;
 
+  selectedContact: Contact = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+  };
+
   constructor(
     private contactsService: ContactsService,
     private stateService: StateService //private toastr: ToastrService
@@ -71,7 +78,8 @@ export class PhonebookComponent implements OnInit {
     });
   }
 
-  openUpdateContactModal(): void {
+  openUpdateContactModal(contact: Contact): void {
+    this.selectedContact = contact;
     this.showUpdateContactModal = true;
   }
 
@@ -132,6 +140,37 @@ export class PhonebookComponent implements OnInit {
 
     // Close the modal
     this.closeCreateContactModal();
+  }
+
+  //Update Contact
+  updateContact(): void {
+    // Extract form values as before
+    const firstName = (
+      document.getElementById('updateFirstName') as HTMLInputElement
+    ).value;
+    const lastName = (
+      document.getElementById('updateLastName') as HTMLInputElement
+    ).value;
+    const email = (document.getElementById('updateEmail') as HTMLInputElement)
+      .value;
+    const phoneNumber = (
+      document.getElementById('updatePhoneNumber') as HTMLInputElement
+    ).value;
+
+    // Create new contact object with generated ID
+    const updatedContact: Contact = {
+      id: this.selectedContact?.id,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      phone_number: phoneNumber,
+    };
+
+    // Add new contact via service
+    this.stateService.updateContact(updatedContact);
+
+    // Close the modal
+    this.closeUpdateContactModal();
   }
 
   //Search input function

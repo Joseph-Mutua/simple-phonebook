@@ -261,7 +261,7 @@
                     <li>
                       <button
                         type="button"
-                       (click)="openUpdateContactModal()"
+                        (click)="openUpdateContactModal(contact)"
                         class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
                       >
                         <svg
@@ -517,7 +517,7 @@
             <label
               for="phoneNumber"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Phone PhoneNumber</label
+              >Phone Number</label
             >
             <input
               type="number"
@@ -553,13 +553,16 @@
 </div>
 <!-- Update modal -->
 <div
-aria-hidden="true"
-[ngClass]="{ flex: showUpdateContactModal , hidden: !showUpdateContactModal  }"
+  aria-hidden="true"
+  [ngClass]="{ flex: showUpdateContactModal, hidden: !showUpdateContactModal }"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
   <div
-    [ngClass]="{ block: showUpdateContactModal, hidden: !showUpdateContactModal }"
+    [ngClass]="{
+      block: showUpdateContactModal,
+      hidden: !showUpdateContactModal
+    }"
     class="fixed top-0 left-0 w-full h-full bg-black opacity-50"
   ></div>
   <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -577,7 +580,7 @@ aria-hidden="true"
         <button
           type="button"
           class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-         (click)="closeUpdateContactModal()"
+          (click)="closeUpdateContactModal()"
         >
           <svg
             aria-hidden="true"
@@ -596,117 +599,82 @@ aria-hidden="true"
         </button>
       </div>
       <!-- Modal body -->
-      <form action="#">
+      <form (ngSubmit)="updateContact()" #contactForm="ngForm">
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
           <div>
             <label
-              for="name"
+              for="firstName"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Name</label
+              >First Name</label
             >
             <input
               type="text"
-              name="name"
-              id="name"
-              value="iPad Air Gen 5th Wi-Fi"
+              name="firstName"
+              id="updateFirstName"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Ex. Apple iMac 27&ldquo;"
+              [(ngModel)]="selectedContact.first_name"
+              required
             />
           </div>
           <div>
             <label
-              for="brand"
+              for="lastName"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Brand</label
+              >Last Name</label
             >
             <input
               type="text"
-              name="brand"
-              id="brand"
-              value="Google"
+              name="updateLastName"
+              id="updateLastName"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Ex. Apple"
+              [(ngModel)]="selectedContact.last_name"
+              required
             />
           </div>
           <div>
             <label
-              for="price"
+              for="email"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Price</label
+              >Email</label
             >
             <input
-              type="number"
-              value="399"
-              name="price"
-              id="price"
+              type="email"
+              name="email"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="$299"
+              id="updateEmail"
+              [(ngModel)]="selectedContact.email"
+              required
             />
           </div>
           <div>
             <label
-              for="category"
+              for="phoneNumber"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Category</label
-            ><select
-              id="category"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              >Phone Number</label
             >
-              <option selected="">Electronics</option>
-              <option value="TV">TV/Monitors</option>
-              <option value="PC">PC</option>
-              <option value="GA">Gaming/Console</option>
-              <option value="PH">Phones</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <label
-              for="description"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Description</label
-            ><textarea
-              id="description"
-              rows="5"
-              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Write a description..."
-            >
-Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, 16GB 2666MHz DDR4 memory, Radeon Pro 5500 XT with 8GB of GDDR6 memory, 256GB SSD storage, Gigabit Ethernet, Magic Mouse 2, Magic Keyboard - US</textarea
-            >
+            <input
+              type="text"
+              name="phoneNumber"
+              id="updatePhoneNumber"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              [(ngModel)]="selectedContact.phone_number"
+              required
+            />
           </div>
         </div>
-        <div class="flex items-center space-x-4">
-          <button
-            type="submit"
-            class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Update contact
-          </button>
-          <button
-            type="button"
-            class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-          >
-            <svg
-              class="mr-1 -ml-1 w-5 h-5"
-              fill="currentColor"
-              viewbox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            Delete
-          </button>
-        </div>
+        <button
+          type="submit"
+          class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        >
+          Update Contact
+        </button>
       </form>
     </div>
   </div>
 </div>
 <!-- Read modal -->
 <div
-  [ngClass]="{ flex: showReadContactModal , hidden: !showReadContactModal  }"
+  [ngClass]="{ flex: showReadContactModal, hidden: !showReadContactModal }"
   tabindex="-1"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -730,7 +698,7 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white"
-              (click)="closeReadContactModal()"
+            (click)="closeReadContactModal()"
           >
             <svg
               aria-hidden="true"
@@ -826,13 +794,16 @@ Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boo
 </div>
 <!-- Delete modal -->
 <div
-  [ngClass]="{ flex: showDeleteContactModal , hidden: !showDeleteContactModal  }"
+  [ngClass]="{ flex: showDeleteContactModal, hidden: !showDeleteContactModal }"
   tabindex="-1"
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
   <div
-    [ngClass]="{ block: showDeleteContactModal, hidden: !showDeleteContactModal }"
+    [ngClass]="{
+      block: showDeleteContactModal,
+      hidden: !showDeleteContactModal
+    }"
     class="fixed top-0 left-0 w-full h-full bg-black opacity-50"
   ></div>
   <div class="relative p-4 w-full max-w-md max-h-full">

@@ -31,4 +31,17 @@ export class StateService {
     // Update the state with the new list
     this._contacts.next(contacts);
   }
+
+    //update contact
+    updateContact(contact: Contact): void {
+      // Get the current list of contacts
+      let contacts = this._contacts.getValue();
+  
+      // Find and replace the contact in the list
+      const index = contacts.findIndex((c) => c.id === contact.id);
+      contacts[index] = contact;
+  
+      // Update the state with the new list
+      this._contacts.next(contacts);
+    }
 }
