@@ -50,6 +50,20 @@ export class PhonebookComponent implements OnInit {
     this.contactsService.getContacts();
     this.stateService.contacts.subscribe((contacts) => {
       this.contactListings = contacts;
+
+      // Sort the contacts array
+      contacts.sort((a, b) => {
+        // Compare first names
+        let comparison = a.first_name.localeCompare(b.first_name);
+
+        // If first names are equal, compare last names
+        if (comparison === 0) {
+          comparison = a.last_name.localeCompare(b.last_name);
+        }
+
+        return comparison;
+      });
+
       this.filteredContacts = contacts;
 
       const totalItems = this.filteredContacts.length;
@@ -62,6 +76,7 @@ export class PhonebookComponent implements OnInit {
       });
     });
   }
+
   @ViewChild('createcontactModal')
   createcontactModal!: ElementRef;
 
@@ -210,9 +225,24 @@ export class PhonebookComponent implements OnInit {
             .includes(this.searchKeyword.toLowerCase())
       );
     }
-    // assign the new array to filteredContacts
+
+    // Sort the filtered array
+    filtered.sort((a, b) => {
+      // Compare first names
+      let comparison = a.first_name.localeCompare(b.first_name);
+
+      // If first names are equal, compare last names
+      if (comparison === 0) {
+        comparison = a.last_name.localeCompare(b.last_name);
+      }
+
+      return comparison;
+    });
+
+    // Assign the sorted array to filteredContacts
     this.filteredContacts = filtered;
   }
+
   //Pagination Functionality
   get startIndex(): number {
     return (this.currentPage - 1) * this.itemsPerPage;
