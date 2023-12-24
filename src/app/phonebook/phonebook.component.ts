@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { Contact } from '../interfaces/contacts.model';
 import { SharedModule } from '../shared/shared.module';
 import { ContactsService } from '../services/contacts.service';
@@ -43,7 +43,8 @@ export class PhonebookComponent implements OnInit {
 
   constructor(
     private contactsService: ContactsService,
-    private stateService: StateService //private toastr: ToastrService
+    private stateService: StateService,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -90,6 +91,23 @@ export class PhonebookComponent implements OnInit {
         this.dropdownVisible[i] = false;
       }
     });
+  }
+
+  @ViewChild('dropdownContainer')
+  dropdownContainer!: ElementRef;
+
+  ngAfterViewInit() {
+    this.renderer.listen('document', 'click', (event: Event) => {
+      if (!this.dropdownContainer.nativeElement.contains(event.target)) {
+        this.dropdownVisible.fill(false); // Close all dropdowns
+      }
+    });
+  }
+
+  isGridView: boolean = false;
+
+  toggleView() {
+    this.isGridView = !this.isGridView;
   }
 
   openUpdateContactModal(contact: Contact): void {
