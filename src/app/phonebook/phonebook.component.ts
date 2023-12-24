@@ -50,23 +50,18 @@ export class PhonebookComponent implements OnInit {
   ngOnInit() {
     this.contactsService.getContacts();
     this.stateService.contacts.subscribe((contacts) => {
-      this.contactListings = contacts;
+    this.contactListings = contacts;
 
-      // Sort the contacts array
+  
       contacts.sort((a, b) => {
-        // Compare first names
         let comparison = a.first_name.localeCompare(b.first_name);
-
-        // If first names are equal, compare last names
         if (comparison === 0) {
           comparison = a.last_name.localeCompare(b.last_name);
         }
-
         return comparison;
       });
 
       this.filteredContacts = contacts;
-
       const totalItems = this.filteredContacts.length;
       this.totalPages = Array(Math.ceil(totalItems / this.itemsPerPage))
         .fill(0)
@@ -147,7 +142,6 @@ export class PhonebookComponent implements OnInit {
 
   //Create New Contact
   addNewContact(): void {
-    // Extract form values as before
     const firstName = (document.getElementById('firstName') as HTMLInputElement)
       .value;
     const lastName = (document.getElementById('lastName') as HTMLInputElement)
@@ -157,10 +151,9 @@ export class PhonebookComponent implements OnInit {
       document.getElementById('phoneNumber') as HTMLInputElement
     ).value;
 
-    // Generate a unique ID
+
     const id = uuidv4();
 
-    // Create new contact object with generated ID
     const newContact: Contact = {
       id: id,
       first_name: firstName,
@@ -169,16 +162,16 @@ export class PhonebookComponent implements OnInit {
       phone_number: phoneNumber,
     };
 
-    // Add new contact via service
+
     this.stateService.addContact(newContact);
 
-    // Close the modal
+
     this.closeCreateContactModal();
   }
 
   //Update Contact
   updateContact(): void {
-    // Extract form values as before
+
     const firstName = (
       document.getElementById('updateFirstName') as HTMLInputElement
     ).value;
@@ -191,7 +184,6 @@ export class PhonebookComponent implements OnInit {
       document.getElementById('updatePhoneNumber') as HTMLInputElement
     ).value;
 
-    // Create new contact object with generated ID
     const updatedContact: Contact = {
       id: this.selectedContact?.id,
       first_name: firstName,
@@ -200,10 +192,10 @@ export class PhonebookComponent implements OnInit {
       phone_number: phoneNumber,
     };
 
-    // Add new contact via service
+
     this.stateService.updateContact(updatedContact);
 
-    // Close the modal
+
     this.closeUpdateContactModal();
   }
 
@@ -217,7 +209,7 @@ export class PhonebookComponent implements OnInit {
   }
 
   deleteSelectedContacts() {
-    // Create a new array that contains only the contacts that are not selected
+    // new array that contains only the contacts that are not selected
     const newContacts = this.filteredContacts.filter(
       (contact) => !contact.selected
     );
